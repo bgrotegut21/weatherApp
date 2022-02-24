@@ -173,11 +173,7 @@
   position: relative;
   left: 3px;
   background: white;
-  transition: transform 500ms ease-in-out 0s;
-}
-
-.overlayAnimation {
-  opacity: 0.6;
+  transition: transform 300ms ease-in-out 0s;
 }
 
 .menuSectionAnimation {
@@ -186,4 +182,35 @@
 
 .changeTempAnimation {
   transform: translateX(15px);
+}
+
+.overlayAnimation {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 300px) {
+  .menuSectionAnimation {
+    width: 200px;
+  }
+
+  .city {
+    width: 180px;
+  }
+
+  .placeText,
+  .resultText {
+    width: 180px;
+  }
+
+  .searchHolder {
+    width: 150px;
+  }
+
+  .search {
+    width: 130px;
+  }
+
+  .searchBar {
+    width: 100px;
+  }
 }

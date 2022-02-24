@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: ['babel-polyfill', './src/data.js'],
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
@@ -21,7 +21,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.\css$/i,
+        test: /.\css$/i,s
         use: ['style-loader', 'css-loader'],
       },
       {
@@ -31,6 +31,16 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [['@babel/preset-env', { targets: 'defaults' }]],
+          },
+        },
       },
     ],
   },

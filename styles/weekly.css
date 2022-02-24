@@ -43,3 +43,31 @@
 
   color: rgb(250, 150, 0);
 }
+
+@media screen and (max-width: 500px) {
+  .weeklyForcast {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .weeklyForcast {
+    width: 250px;
+  }
+
+  .weekLabel {
+    width: 120px;
+    font-size: 18px;
+  }
+  .precipitation {
+    font-size: 12px;
+
+    width: 30px;
+  }
+
+  .weeklyHigh,
+  .weeklyLow {
+    width: 30px;
+    font-size: 18px;
+  }
+}

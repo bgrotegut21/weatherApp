@@ -5,12 +5,18 @@ isCelsius = true
 currentData
 
 
-currentCities = [{city: "London", country "GB", lat:"32121, long: "2432432"}]
+currentCities = [{city: "London",state:"London" country "GB", lat:"32121, long: "2432432"}]
 
 
 getData
+    then will take the first city from currentCities however
+    if currentCities does not exist it will use new york as the default
+
+
   currentForecastData 
   currentOneTimeData 
+
+
 
   getWeeklyData
     this function will get weekly data 
@@ -42,3 +48,12 @@ getData
   changeUnit
     isCelsius = false
     getData
+
+      getStorage
+    this functio will get it from the storage and overwrite current cities
+    to the data
+
+
+  
+  storeCity
+    will take the data from currentCities and store in local storage
