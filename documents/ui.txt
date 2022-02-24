@@ -1,0 +1,121 @@
+  organizeDailyData
+    loop through the organized data and than creaate the hourly 
+    template based on the condition of the data
+  
+  organizedBackgroundData 
+    loop through daily data and change the background image depending on the image and time of day
+
+
+  organizeTopData
+  get the organized top data and organizing using city template 
+
+  oraganizeWeeklyData
+      loop through organized data and create weeklines based on the
+      condition of the data
+
+  organizeBottomData 
+    will take the organized bottom data and organize the data so it will show in the bottom 
+    portion of the websits
+  
+  toggleMenu
+    this will animate the menu to pop out as soon is the animation is finished
+    than it will add the bindings if the user clicked on it again the biindings will go away
+    and the menu will animate away and be hidden
+
+
+
+  
+  organizeAllData 
+    this will oranize all the data
+
+  organizeSearchData(results)
+    it will first remove currentcity bindings and results bindings than it will empty current citites
+
+    will take the results of the search data
+    and organize the data so it can be used in the results it will also change the text
+    name from cities to result and using the modified city template it will take the
+    data and turn it into elements it will also m
+
+    it will than add result bindings
+
+
+  addResult
+    will take the results from the element and then call
+    appendResult(result)
+
+
+
+  organizeCurrentCities
+    it will first remove and result bindings and cities binddings than it will empty the results
+
+    will take the currencities data
+    and organize it so it can be displayed it will also change the text name from result to cities
+
+    it will than add the bindings to the cities
+
+
+  removeCity 
+    will take the results of the element and the remove the city
+    delereCity(result)
+
+  exitResults 
+    organizeCurrentCities
+    than hide exit result button
+
+
+
+
+  removeResultBindings
+    will add the result bindings
+    which would be addResult
+
+
+  removeCitiesBindings
+    will add the citites bindings
+
+
+  addResultBindings
+    will add the result bindings
+    which would be addResult
+
+
+  addCitiesBindings
+    will add the citites bindings
+
+
+      getResults
+    text = dom.searchBar.textContent
+    serachData = getSearchData(text)
+    organizeSearchData(text)
+
+
+
+
+  changeUnit
+    data.changeUnit()
+
+    it will first remove the change unit binding than play the animation than 
+    once the animation finishes it will than add the change unit binding back
+
+
+  addChngeUnitBinding
+    will add change unit binding
+
+  removeChangeUnitBinding
+    will remove change unit binding
+
+
+  addMenuBindings
+    this will add bindings to the  menu such as toggle menu and get results
+
+
+  removeMenuBindings
+    this will remove menu bindings and chngeUnit bindings
+
+
+
+
+
+  
+
+

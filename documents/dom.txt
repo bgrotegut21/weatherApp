@@ -1,0 +1,2 @@
+export function getDomElements 
+  this function will have the elements that we are using in a neat list

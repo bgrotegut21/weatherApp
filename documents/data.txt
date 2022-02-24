@@ -1,0 +1,44 @@
+data
+
+isCelsius = true
+
+currentData
+
+
+currentCities = [{city: "London", country "GB", lat:"32121, long: "2432432"}]
+
+
+getData
+  currentForecastData 
+  currentOneTimeData 
+
+  getWeeklyData
+    this function will get weekly data 
+
+  getDailyData
+    this function will get daily data 
+
+  getCurrentTopData
+    function will use current forecast data and current one time data and organize it
+    so it can be used in the top data
+
+  getCurrentBottomData 
+    function will use current forecast data and bottom data oand organize it so it can be used in the bottom data
+
+  getSearchHData(text)
+    will use geo coding api and return results
+
+  oraganize weeklyData
+    this function will take information from the weekly data and organize it visually
+
+  appendResult(result)
+    will first check the results in the list and if it does not exist it will than 
+    add it to the list
+    currentCitites.push(result)
+
+  delereCity(result)
+    this function will remove the city based on its name and country/state
+
+  changeUnit
+    isCelsius = false
+    getData

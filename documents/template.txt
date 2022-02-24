@@ -1,0 +1,22 @@
+ui
+  createMainSection
+    A section that has the deault template with many stuff empty
+
+  createCityTemplate(isResult)
+    this will create a default city template if isResult is true than it would create a modified city template with results
+
+
+  createWarningTemplate 
+    this will create a warning template in case something bad happends
+
+
+
+  currentHourlyParaObject = {time, condition, chance, sunset, temp}
+  currentWeeklyParaObject = {dayOfWeek, condition, chance, high, low}
+
+
+  createHourlyForeCastTemplate(currentHourlyParaObject)  
+    this would create an hourly horecast holder with the paramater met 
+
+  createWeeklyForeCast(currentWeeklyParaObject)
+    this would create a weekly forecast line with paramater along is it met the condition

@@ -1,0 +1,133 @@
+body {
+  color: white;
+}
+
+.triggerButton {
+  position: absolute;
+  z-index: 1;
+
+  height: 50px;
+  width: 50px;
+  top: 4px;
+  left: 2px;
+
+  opacity: 1;
+  text-indent: -9999px;
+
+  cursor: pointer;
+}
+
+.words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cityTitle {
+  width: 500px;
+  overflow-wrap: break-word;
+
+  font-size: xx-large;
+  text-align: center;
+  /* font-size: xx-small; */
+}
+
+.temp {
+  font-size: 80px;
+}
+
+.hamburgerButton {
+  width: 100px;
+  height: 60px;
+}
+
+.wordHolder {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.words {
+  font-family: 'Assistant', sans-serif;
+
+  width: 300px;
+  height: 250px;
+}
+
+.foreCastHolder {
+  font-family: 'Assistant', sans-serif;
+}
+
+.infoText {
+  color: rgb(250, 150, 0);
+}
+
+.words h1,
+.words h2 {
+  font-weight: lighter;
+}
+.line {
+  position: relative;
+  background: rgb(255, 255, 255);
+  text-indent: -9999px;
+  height: 5px;
+  width: 40px;
+  left: 10px;
+}
+
+.foreCastHolder {
+  position: relative;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.line3 {
+  top: 30px;
+}
+
+.line2 {
+  top: 20px;
+}
+
+.line1 {
+  top: 10px;
+}
+
+.hourlyForcast {
+  display: flex;
+
+  width: 500px;
+
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.foreCastHolder {
+  width: 50px;
+  margin: 5px;
+}
+
+.hourlyForcastHolder {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+/* .warningHolder {
+  visibility: hidden;
+  border-top: 1px solid white;
+
+  font-family: 'Assistant', sans-serif;
+
+  display: flex;
+  justify-content: center;
+  height: 200px;
+} */
+
+.warning {
+  width: 500px;
+}

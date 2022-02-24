@@ -1,0 +1,45 @@
+.weeklyForcast {
+  width: 500px;
+}
+
+.forecastLine {
+  display: flex;
+  height: 50px;
+  line-height: 50px;
+}
+.weekLabel {
+  width: 200px;
+  position: relative;
+  left: 10px;
+}
+
+.weeklyHigh,
+.weeklyLow {
+  width: 100px;
+  text-align: center;
+  font-weight: lighter;
+
+  font-family: 'Assistant', sans-serif;
+}
+
+.weeklyForcastHolder {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid white;
+}
+
+.precipitation {
+  width: 70px;
+  text-align: center;
+}
+
+.weekLabel {
+  font-family: 'Assistant', sans-serif;
+  font-weight: lighter;
+}
+
+.precipitation {
+  font-family: 'Assistant', sans-serif;
+
+  color: rgb(250, 150, 0);
+}
