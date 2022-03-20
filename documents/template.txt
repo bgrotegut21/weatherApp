@@ -11,6 +11,9 @@ ui
 
 
 
+  currentNowObject = {
+    cityName, condition, temp, max, min
+  } 
   currentHourlyParaObject = {time, condition, chance, sunset, temp}
   currentWeeklyParaObject = {dayOfWeek, condition, chance, high, low}
 

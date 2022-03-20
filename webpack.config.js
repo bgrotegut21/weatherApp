@@ -3,7 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: ['babel-polyfill', './src/data.js'],
+  entry: [
+    'babel-polyfill',
+    './src/data.js',
+    './src/index.js',
+    './src/methods.js',
+  ],
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
@@ -21,7 +26,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.\css$/i,s
+        test: /.\css$/i,
         use: ['style-loader', 'css-loader'],
       },
       {
