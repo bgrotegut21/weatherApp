@@ -1,0 +1,254 @@
+.menuText {
+  height: 50px;
+  font-family: 'Assistant', sans-serif;
+
+  line-height: 50px;
+}
+
+.menu {
+  height: 50px;
+}
+
+.currentCities {
+  display: none;
+}
+
+.searchHolder {
+  height: 30px;
+  display: flex;
+  width: 250px;
+  flex-direction: column;
+  border: 2px solid white;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+}
+.search {
+  width: 230px;
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.searchBar {
+  background: none;
+  color: white;
+  width: 210px;
+  border: none;
+}
+
+.searchButton {
+  cursor: pointer;
+}
+
+.placeTitle {
+  font-family: 'Assistant', sans-serif;
+  height: 40px;
+  line-height: 40px;
+}
+
+.exitMenu {
+  font-family: 'Assistant', sans-serif;
+  position: relative;
+  right: 10px;
+  cursor: pointer;
+}
+
+.city {
+  border-top: 1px solid white;
+
+  padding: 5px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.exitResults {
+  width: 90px;
+}
+
+.exitResults,
+.placeText,
+.resultText {
+  font-family: 'Assistant', sans-serif;
+  font-weight: lighter;
+}
+
+.resultText {
+  width: 200px;
+
+  overflow-wrap: break-word;
+}
+
+.placeText:hover,
+.exitResults:hover {
+  color: rgb(149, 149, 149);
+  cursor: pointer;
+}
+
+.placeText {
+  width: 200px;
+  margin-left: 30px;
+  overflow-wrap: break-word;
+}
+
+.deleteCity,
+.addCity {
+  width: 50px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+}
+
+.menuSection {
+  position: fixed;
+  background: rgb(46, 46, 46);
+  overflow: auto;
+  width: 00px;
+
+  height: 100%;
+
+  z-index: 2;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  transition: width 500ms ease-in-out 0s;
+}
+
+.overlay {
+  position: fixed;
+  background: black;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: 'Assistant', sans-serif;
+
+  opacity: 0;
+  display: none;
+  transition: opacity 500ms ease-in-out 0s;
+}
+
+.toggleTempHolder {
+  display: flex;
+  width: 120px;
+  margin-left: 10px;
+}
+
+.celsius {
+  margin-right: 10px;
+}
+
+.currentError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  display: none;
+}
+
+.tryAgainButton {
+  width: 150px;
+  height: 40px;
+
+  background: rgb(43, 43, 182);
+  border: 0px;
+  color: white;
+  font-size: large;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+
+  font-family: 'Assistant', sans-serif;
+  transition: background 300ms ease-in-out 0s;
+}
+
+.tryAgainButton:hover {
+  background: rgb(32, 32, 135);
+}
+
+.celsius,
+.fahrenheit {
+  font-family: 'Assistant', sans-serif;
+}
+
+.fahrenheit {
+  margin-left: 10px;
+}
+
+.toggleTemp {
+  width: 40px;
+  height: 25px;
+  border-radius: 50px;
+
+  border: 2px solid white;
+}
+
+.toolsContainer {
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.changeTemp {
+  width: 15px;
+  text-indent: -999999px;
+  border-radius: 30px;
+  border: none;
+  position: relative;
+  left: 3px;
+  background: white;
+  cursor: pointer;
+  transition: transform 300ms ease-in-out 0s;
+}
+
+.menuSectionAnimation {
+  width: 300px;
+}
+
+.changeTempAnimation {
+  transform: translateX(15px);
+}
+
+.overlayAnimation {
+  opacity: 0.6;
+}
+
+.overlayErrorAnimation {
+  opacity: 1;
+}
+
+@media screen and (max-width: 300px) {
+  .menuSectionAnimation {
+    width: 200px;
+  }
+
+  .city {
+    width: 180px;
+  }
+
+  .placeText,
+  .resultText {
+    width: 180px;
+  }
+
+  .searchHolder {
+    width: 150px;
+  }
+
+  .search {
+    width: 130px;
+  }
+
+  .searchBar {
+    width: 100px;
+  }
+}
