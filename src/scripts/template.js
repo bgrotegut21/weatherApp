@@ -82,47 +82,47 @@ const template = () => {
           <div class="weatherRow">
             <div class="infoBox sunrise">
               <p>SUNRISE</p>
-              <h2>6:48AM</h2>
+              <h2 class = 'sunriseTime'>6:48AM</h2>
             </div>
             <div class="infoBox sunset">
               <p>SUNSET</p>
-              <h2>5:32PM</h2>
+              <h2 class = 'sunsetTime'>5:32PM</h2>
             </div>
           </div>
 
           <div class="weatherRow">
             <div class="infoBox chanceOfRain">
               <p>CHANCE OF RAIN</p>
-              <h2>20%</h2>
+              <h2 class = 'perciptationText'>20%</h2>
             </div>
 
             <div class="infoBox humidity">
               <p>HUMIDITY</p>
-              <h2>20%</h2>
+              <h2 class = 'humidityText'>20%</h2>
             </div>
           </div>
 
           <div class="weatherRow">
             <div class="infoBox wind">
               <p>WIND</p>
-              <h2>w 4km/hr</h2>
+              <h2 class = 'windText'>w 4km/hr</h2>
             </div>
 
             <div class="infoBox feelsLike">
               <p>FEELS LIKE</p>
-              <h2>-6°</h2>
+              <h2 class = 'feelsText'>-6°</h2>
             </div>
           </div>
 
           <div class="weatherRow">
             <div class="infoBox pressure">
               <p>PRESSURE</p>
-              <h2>1012 hPa</h2>
+              <h2 class = 'pressureText'>1012 hPa</h2>
             </div>
 
             <div class="infoBox visibility">
               <p>VISIBILITY</p>
-              <h2>100 km</h2>
+              <h2 class = 'visbiltyText'>100 km</h2>
             </div>
           </div>
         </div>
@@ -264,18 +264,31 @@ const template = () => {
     return hourlyText;
   };
 
-  const createForecastLine = () => {
-    const foreCastText = `          <div class="forecastLine">
-    <h2 class="weekLabel">Wednesday</h2>
-    <img
-      class="weeklyIcon"
-      src="./assets/lightclouds.svg"
-      alt="a weather icon for the week"
-    />
-    <h2 class="precipitation"></h2>
-    <h2 class="weeklyHigh">9</h2>
-    <h2 class="weeklyLow">-3</h2>
-  </div>`;
+  const createForecastLine = (data) => {
+    console.log(data.chance, 'data the chances');
+    const currentChance = Math.floor(data.chanceOfRain * 100);
+    let chanceText = '';
+    const forecastIcon = getIcon(data);
+    const { day } = data;
+    const { max } = data;
+    const { min } = data;
+
+    console.log(currentChance, 'the current chance');
+    if (currentChance > 0) chanceText = `${currentChance}%`;
+
+    const foreCastText = `<div class="forecastLine">
+                            <h2 class="weekLabel">${day}</h2>
+                            <img
+                              class="weeklyIcon"
+                              src="${forecastIcon}"
+                              alt="a weather icon for the week"
+                            />
+                            <h2 class="precipitation">${chanceText}</h2>
+                            <h2 class="weeklyHigh">${max}</h2>
+                            <h2 class="weeklyLow">${min}</h2>
+                          </div>`;
+
+    return foreCastText;
   };
 
   return {

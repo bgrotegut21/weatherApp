@@ -13,6 +13,7 @@ module.exports = {
     './src/scripts/template.js',
     './src/scripts/dom.js',
     './src/scripts/ui.js',
+    './src/scripts/menu.js',
   ],
   devtool: 'inline-source-map',
   devServer: {

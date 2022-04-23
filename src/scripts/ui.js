@@ -7,12 +7,12 @@ import '../styles/weekly.css';
 import data from './data';
 import template from './template';
 
-import { getDom, getImages, getIcons } from './dom';
+import { getDom, getImages } from './dom';
 
 const ui = () => {
   let dom = getDom();
   const currentTemplate = template();
-  const findData = data();
+  const findData = data;
   const image = getImages();
   const arrangement = template();
 
@@ -75,7 +75,11 @@ const ui = () => {
 
   const organizeTopData = () => {
     const { topData } = organizedData;
+    console.log(organizedData);
+
     const hourlyData = organizedData.hourlyData[0];
+
+    console.log(hourlyData, 'the current hourly data');
 
     console.log(topData, 'the current top data');
     dom.cityTitle.textContent = `${topData.cityName}, US`;
@@ -112,6 +116,10 @@ const ui = () => {
   const organizeHourlyForecastHolder = () => {
     dom.hourlyForecast.innerHTML = '';
 
+    organizedData.hourlyData.forEach((hourly) => {
+      // console.log(hourly, 'THE HOURLY DATA');
+    });
+
     console.log(organizedData.hourlyData, 'organized hourly data');
     let currentHourlyData = organizedData.hourlyData.splice(1);
     const currentHour = currentHourlyData[0];
@@ -138,6 +146,34 @@ const ui = () => {
     }
   };
 
+  const organizeWeeklyData = () => {
+    dom.weeklyForecast.innerHTML = '';
+
+    const weeklyData = organizedData.weeklyData.splice(1);
+
+    weeklyData.forEach((weekData) => {
+      const weeklyTemplate = arrangement.createForecastLine(weekData);
+      dom.weeklyForecast.innerHTML += weeklyTemplate;
+    });
+  };
+
+  const organizeBottomData = () => {
+    const { bottomData } = organizedData;
+
+    const perciptationText = `${Math.floor(bottomData.chanceOfRain * 100)}%`;
+
+    dom.sunriseTime.textContent =
+      bottomData.sunrise.time.currentDateObject.amPm;
+    dom.sunsetTime.textContent = bottomData.sunset.time.currentDateObject.amPm;
+
+    dom.perciptationText.textContent = perciptationText;
+    dom.humidityText.textContent = `${bottomData.humidity}%`;
+    dom.windText.textContent = bottomData.windspeed;
+    dom.feelsText.textContent = `${bottomData.feelsLike}°`;
+    dom.pressureText.textContent = `${bottomData.pressure}hPa`;
+    dom.visbiltyText.textContent = `${bottomData.currentVisiblity}`;
+  };
+
   const activatePageData = async () => {
     organizedData = await findData.activateData();
     currentTime = findData.getCurrentTime();
@@ -145,6 +181,8 @@ const ui = () => {
     organizeTopData();
     organizeHourlyForecastHolder();
     organizeWarningData();
+    organizeWeeklyData();
+    organizeBottomData();
   };
 
   const activatePage = () => {
@@ -154,8 +192,9 @@ const ui = () => {
     dom = getDom();
   };
 
-  activatePage();
-  const currentPageData = activatePageData();
+  return { activatePage, activatePageData };
 };
 
-ui();
+const userInterface = ui();
+
+export default userInterface;

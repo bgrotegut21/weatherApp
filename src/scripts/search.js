@@ -38,7 +38,7 @@ const search = () => {
     console.log(items, 'the current items');
   };
 
-  findResults('ushuaia');
+  findResults('london');
 };
 
 search();

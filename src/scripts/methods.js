@@ -53,14 +53,14 @@ const convertMetersToKilometers = (num) => {
   console.log(kilometer, 'current kilometer');
 
   if (num % 1 !== 0) kilometer = kilometer.toFixed(1);
-  return `${kilometer} km`;
+  return `${kilometer.toFixed(1)} km`;
 };
 
 const convertMetersToMiles = (num) => {
   let mile = num / 1609.34;
 
   if (num % 1 !== 0) mile = mile.toFixed(1);
-  return `${mile} miles`;
+  return `${mile.toFixed(1)} miles`;
 };
 
 const convertDtToObject = (date, timezoneOffset) => {

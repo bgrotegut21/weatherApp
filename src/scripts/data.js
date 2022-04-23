@@ -9,12 +9,12 @@ import settings from './settings';
 
 import emit from './emit';
 
-const data = () => {
-  const isCelsius = true;
+const weatherData = () => {
+  let isCelsius = true;
 
   const options = settings();
   const { appid } = options;
-  const units = '&units=metric';
+  let units = '&units=metric';
 
   const forecastUrl = 'https://api.openweathermap.org/data/2.5/weather?';
   const oneTimeUrl = 'https://api.openweathermap.org/data/2.5/onecall?';
@@ -24,6 +24,8 @@ const data = () => {
   let currentForecastData;
   let currentOneTimeData;
   let currentTries = -1;
+
+  const currentIndex = 0;
 
   let timezoneOffset;
   let currentTime;
@@ -51,6 +53,8 @@ const data = () => {
     return false;
   };
 
+  const getResults = () => currentCities;
+
   const deleteCityByIndex = (index) => {
     if (currentCities[index]) {
       let latestCities = currentCities;
@@ -72,7 +76,6 @@ const data = () => {
   const getData = async (index) => {
     let forecastData;
     let oneTimeData;
-    let currentIndex = 0;
 
     // if (index) {
     //   if (currentCities[index]) {
@@ -87,21 +90,19 @@ const data = () => {
     //   }
     // }
 
-    if (currentCities.length === 0) {
-      appendResult({
-        city: 'Seattle',
-        state: 'Washington',
-        country: 'US',
-        lat: '47.6038321',
-        long: '-122.3300624',
-        // lat: '40.7127281',
-        // long: '-74.0060152',
-      });
-      // console.log(currentCities, 'the current cities');
-      return getData();
-    }
-
-    if (index && currentCities[index]) currentIndex = index;
+    // if (currentCities.length === 0) {
+    //   appendResult({
+    //     city: 'Seattle',
+    //     state: 'Washington',
+    //     country: 'US',
+    //     lat: '47.6038321',
+    //     long: '-122.3300624',
+    //     // lat: '40.7127281',
+    //     // long: '-74.0060152',
+    //   });
+    //   // console.log(currentCities, 'the current cities');
+    //   return getData();
+    // }
 
     const currentCity = currentCities[currentIndex];
     const coordinateUrl = getCoordinatesUrl(currentCity);
@@ -165,11 +166,11 @@ const data = () => {
       const sunriseTime = convertDtToObject(sunrise, timezoneOffset);
 
       const sunsetObject = {
-        time: sunsetTime.currentDateObject,
+        time: sunsetTime,
         condition: 'Sunset',
       };
       const sunriseObject = {
-        time: sunriseTime.currentDateObject,
+        time: sunriseTime,
         condition: 'Sunrise',
       };
 
@@ -193,7 +194,7 @@ const data = () => {
     let currentSunset;
     let currentSunrise;
 
-    if (currentHour > possibleSunsets[0].time.hours) {
+    if (currentHour > possibleSunsets[0].time.currentDateObject.hours) {
       currentSunset = possibleSunsets[1];
     } else {
       currentSunset = possibleSunsets[0];
@@ -201,7 +202,7 @@ const data = () => {
 
     // console.log(possibleSunrises[0], 'the current time');
 
-    if (currentHour > possibleSunrises[0].time.hours) {
+    if (currentHour > possibleSunrises[0].time.currentDateObject.hours) {
       currentSunrise = possibleSunrises[1];
     } else {
       currentSunrise = possibleSunrises[0];
@@ -213,8 +214,8 @@ const data = () => {
   const changeWindspeedData = (num) => {
     let currentWindspeed = '';
 
-    if (isCelsius) currentWindspeed = `w ${num} km/h`;
-    else currentWindspeed = `w ${num} mph`;
+    if (isCelsius) currentWindspeed = `${num} km/h`;
+    else currentWindspeed = `${num} mph`;
     return currentWindspeed;
   };
 
@@ -236,6 +237,8 @@ const data = () => {
     const { pressure } = currentForecastData.main;
     const { humidity } = currentForecastData.main;
     const { visibility } = currentForecastData;
+
+    console.log(visibility.toFixed(1), 'visiblity fixed to one decimal place');
 
     if (isCelsius) currentVisiblity = convertMetersToKilometers(visibility);
     else currentVisiblity = convertMetersToMiles(visibility);
@@ -263,6 +266,7 @@ const data = () => {
       const weeklyObject = {
         day: currentTime.currentDateObject.weekDay,
         condition: data.weather[0].main,
+        description: data.weather[0].description,
         chanceOfRain: data.pop,
         max: removeNegativeZeroes(data.temp.max),
         min: removeNegativeZeroes(data.temp.min),
@@ -280,13 +284,27 @@ const data = () => {
     let index = 0;
     const newArray = array;
 
+    // console.log(array, 'the current array');
+    // console.log(sunData, 'the sun data');
+
+    // console.log(array, 'the hourly obejects');
+
+    console.log(sunData, 'the current sun data');
+
     array.forEach((hourlyObject) => {
       sunData.forEach((sunsetData) => {
+        // console.log(sunsetData, 'the current sunset data');
+        // console.log(hourlyObject, 'the current hourlyObject');
+
         if (
-          sunsetData.time.year === hourlyObject.time.year &&
-          sunsetData.time.month === hourlyObject.time.month &&
-          sunsetData.time.day === hourlyObject.time.day &&
-          sunsetData.time.hours === hourlyObject.time.hours
+          sunsetData.time.currentDateObject.year ===
+            hourlyObject.time.currentDateObject.year &&
+          sunsetData.time.currentDateObject.month ===
+            hourlyObject.time.currentDateObject.month &&
+          sunsetData.time.currentDateObject.day ===
+            hourlyObject.time.currentDateObject.day &&
+          sunsetData.time.currentDateObject.hours ===
+            hourlyObject.time.currentDateObject.hours
         ) {
           index += 1;
           currentSunData.push({
@@ -301,6 +319,8 @@ const data = () => {
     currentSunData.forEach((currentData) => {
       newArray.splice(currentData.currentIndex, 0, currentData.sunset);
     });
+
+    console.log(newArray, 'the current new array');
     return newArray;
   };
 
@@ -310,7 +330,7 @@ const data = () => {
     newArray = getSunArrays(newArray, sunsetData.sunsetArray);
     newArray = getSunArrays(newArray, sunsetData.sunriseArray);
 
-    // console.log(newArray, 'the current new array');
+    console.log(newArray, 'the current new array');
     return newArray;
   };
 
@@ -389,12 +409,18 @@ const data = () => {
     };
   };
 
-  const activateData = async (index) => {
+  const changeTemp = () => {
+    isCelsius = !isCelsius;
+    isCelsius ? (units = '&units=metric') : (units = '&units=imperial');
+    return { isCelsius, units };
+  };
+
+  const activateData = async () => {
     try {
+      const index = currentIndex;
       let currentData;
 
-      if (currentCities[index]) currentData = await getData(index);
-      else currentData = await getData();
+      currentData = await getData(index);
 
       currentForecastData = currentData.forecastData;
       currentOneTimeData = currentData.oneTimeData;
@@ -403,8 +429,8 @@ const data = () => {
 
       // console.log(currentTime, 'the current time');
 
-      console.log(currentOneTimeData, 'current one time data');
-      console.log(currentForecastData, 'the current forecastdata');
+      // console.log(currentOneTimeData, 'current one time data');
+      // console.log(currentForecastData, 'the current forecastdata');
 
       const topData = getTopData();
       const hourlyData = getHourlyData();
@@ -424,7 +450,8 @@ const data = () => {
       if (currentTries < 3) {
         return activateData();
       }
-      return { currentOneTimeData };
+      throw new Error(err);
+      return { message: 'cannot get data' };
     }
   };
 
@@ -436,13 +463,13 @@ const data = () => {
   //   long: '-74.0060152',
   // });
 
-  appendResult({
-    city: 'Rugby',
-    state: 'North Dakota',
-    country: 'US',
-    lat: '48.368888',
-    long: '-99.996246',
-  });
+  // appendResult({
+  //   city: 'Rugby',
+  //   state: 'North Dakota',
+  //   country: 'US',
+  //   lat: '48.368888',
+  //   long: '-99.996246',
+  // });
 
   // appendResult({
   //   city: 'Midland',
@@ -452,12 +479,30 @@ const data = () => {
   //   long: '-102.0779482',
   // });
 
+  appendResult({
+    city: 'Seattle',
+    state: 'Washington',
+    country: 'US',
+    lat: '47.6038321',
+    long: '-122.3300624',
+    // lat: '40.7127281',
+    // long: '-74.0060152',
+  });
+
+  appendResult({
+    city: 'Provo',
+    state: 'Utah',
+    country: 'US',
+    lat: '40.2338438',
+    long: '-111.6585337',
+  });
+
   // appendResult({
-  //   city: 'Provo',
-  //   state: 'Utah',
-  //   country: 'US',
-  //   lat: '40.2338438',
-  //   long: '-111.6585337',
+  //   city: 'London',
+  //   state: 'England',
+  //   country: 'GB',
+  //   lat: '51.5073219',
+  //   long: '-0.1276474',
   // });
 
   // appendResult({
@@ -492,7 +537,16 @@ const data = () => {
   //   long: '-68.3184972880496',
   // });
 
-  return { activateData, appendResult, deleteCityByIndex, getCurrentTime };
+  return {
+    activateData,
+    appendResult,
+    deleteCityByIndex,
+    getCurrentTime,
+    getResults,
+    changeTemp,
+  };
 };
+
+const data = weatherData();
 
 export default data;

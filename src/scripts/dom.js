@@ -42,13 +42,25 @@ const getDom = () => {
     tryAgainButton: document.querySelector('.tryAgainButton'),
     triggerButton: document.querySelector('.triggerButton'),
     cityTitle: document.querySelector('.cityTitle'),
+
     condition: document.querySelector('.condition'),
     temp: document.querySelector('.temp'),
     warningHolder: document.querySelector('.warningHolder'),
     highTemp: document.querySelector('.highTemp'),
     lowTemp: document.querySelector('.lowTemp'),
     hourlyForecast: document.querySelector('.hourlyForcast'),
-    weeklyForecast: document.querySelector('.weeklyForecast'),
+    weeklyForecast: document.querySelector('.weeklyForcast'),
+    perciptationText: document.querySelector('.perciptationText'),
+    humidityText: document.querySelector('.humidityText'),
+    windText: document.querySelector('.windText'),
+    feelsText: document.querySelector('.feelsText'),
+    sunsetTime: document.querySelector('.sunsetTime'),
+    sunriseTime: document.querySelector('.sunriseTime'),
+    pressureText: document.querySelector('.pressureText'),
+    visbiltyText: document.querySelector('.visbiltyText'),
+    hamburgerButton: document.querySelector('.hamburgerButton'),
+    menuSection: document.querySelector('.menuSection'),
+
     body: document.body,
   };
 
