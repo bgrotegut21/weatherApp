@@ -63,6 +63,10 @@ const convertMetersToMiles = (num) => {
   return `${mile.toFixed(1)} miles`;
 };
 
+// const convertMetersToMiles = (num, isCelsius) => {
+
+// }
+
 const convertDtToObject = (date, timezoneOffset) => {
   const daysOfTheWeek = [
     'Sunday',
