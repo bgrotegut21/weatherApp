@@ -24,7 +24,7 @@ const search = () => {
     try {
       if (text.length > 0) results = await fetchData(url);
 
-      console.log(results, 'THE current retults');
+      // console.log(results, 'THE current retults');
 
       if (!Array.isArray(results)) results = [];
 
