@@ -2,6 +2,8 @@ import {
   convertDtToObject,
   convertMetersToKilometers,
   convertMetersToMiles,
+  convertKilometersToMiles,
+  convertCelsiusToFarenheight,
   fetchData,
 } from './methods';
 
@@ -14,46 +16,80 @@ const weatherData = () => {
 
   const options = settings();
   const { appid } = options;
-  let units = '&units=metric';
+  const units = '&units=metric';
 
   const forecastUrl = 'https://api.openweathermap.org/data/2.5/weather?';
   const oneTimeUrl = 'https://api.openweathermap.org/data/2.5/onecall?';
 
-  const currentCities = [];
+  let currentCities = [];
 
   let currentForecastData;
   let currentOneTimeData;
   let currentTries = -1;
 
-  const currentIndex = 0;
+  let defaultCelsius = true;
+
+  let currentIndex = 0;
 
   let timezoneOffset;
   let currentTime;
 
+  // const appendResult = (result) => {
+  //   let isSame = true;
+
+  //   console.log(result)
+
+  //   if (currentCities.length > 0) {
+  //     currentCities.forEach((currentResult) => {
+  //       const currentResultKeys = Object.keys(currentResult);
+  //       currentResultKeys.forEach((key) => {
+  //         if (currentResult[key] !== result[key]) {
+  //           isSame = false;
+  //         }
+  //       });
+  //     });
+  //   } else {
+  //     isSame = false;
+  //   }
+
+  //   if (!isSame) {
+  //     currentCities.push(result);
+  //     return result;
+  //   }
+  //   return false;
+  // };
+
+  const compareObjects = (object1, object2) => {
+    const objectKeys = Object.keys(object1);
+    let isEqual = true;
+
+    objectKeys.forEach((key) => {
+      if (object1[key] !== object2[key]) {
+        isEqual = false;
+      }
+    });
+    return isEqual;
+  };
+
   const appendResult = (result) => {
-    let isSame = true;
+    console.log(result, 'the current result');
 
-    if (currentCities.length > 0) {
-      currentCities.forEach((currentResult) => {
-        const currentResultKeys = Object.keys(currentResult);
-        currentResultKeys.forEach((key) => {
-          if (currentResult[key] !== result[key]) {
-            isSame = false;
-          }
-        });
-      });
-    } else {
-      isSame = false;
-    }
+    const checkResult = currentCities.filter((city) =>
+      compareObjects(city, result)
+    );
 
-    if (!isSame) {
+    console.log(checkResult, 'the check result');
+
+    if (checkResult.length === 0) {
       currentCities.push(result);
-      return result;
+    } else {
+      return false;
     }
-    return false;
   };
 
   const getResults = () => currentCities;
+
+  const getCityByIndex = (cityIndex) => currentCities[cityIndex];
 
   const deleteCityByIndex = (index) => {
     if (currentCities[index]) {
@@ -61,10 +97,13 @@ const weatherData = () => {
       const currentCity = currentCities[index];
       latestCities = latestCities.filter((city) => {
         if (city.lat === currentCity.lat && city.long === currentCity.long) {
-          return true;
+          return false;
         }
-        return false;
+        return true;
       });
+
+      currentCities = latestCities;
+
       return latestCities;
     }
     return new Error('City is not in the array');
@@ -125,10 +164,19 @@ const weatherData = () => {
   };
 
   const removeNegativeZeroes = (num) => {
+    // const temp = Math.round(num);
+
     const temp = Math.round(num);
 
     if (Object.is(temp, -0)) return 0;
     return temp;
+  };
+
+  const createTempObject = (num) => {
+    const celsius = removeNegativeZeroes(num);
+    // const celsius = num;
+    const fahrenheit = convertCelsiusToFarenheight(num);
+    return { celsius, fahrenheit };
   };
 
   const getTopData = () => {
@@ -139,16 +187,14 @@ const weatherData = () => {
     currentNowObject.description = currentForecastData.weather[0].description;
     currentNowObject.condition = currentForecastData.weather[0].main;
 
-    currentNowObject.temp = removeNegativeZeroes(
-      Math.round(currentForecastData.main.temp)
+    currentNowObject.temp = createTempObject(currentForecastData.main.temp);
+
+    currentNowObject.max = createTempObject(
+      currentOneTimeData.daily[0].temp.max
     );
 
-    currentNowObject.max = removeNegativeZeroes(
-      Math.round(currentOneTimeData.daily[0].temp.max)
-    );
-
-    currentNowObject.min = removeNegativeZeroes(
-      Math.round(currentOneTimeData.daily[0].temp.min)
+    currentNowObject.min = createTempObject(
+      currentOneTimeData.daily[0].temp.min
     );
 
     return currentNowObject;
@@ -211,28 +257,45 @@ const weatherData = () => {
     return { currentSunrise, currentSunset };
   };
 
-  const changeWindspeedData = (num) => {
-    let currentWindspeed = '';
+  // const changeWindspeedData = (num) => {
+  //   let currentWindspeed = '';
 
-    if (isCelsius) currentWindspeed = `${num} km/h`;
-    else currentWindspeed = `${num} mph`;
-    return currentWindspeed;
+  //   if (isCelsius) currentWindspeed = `${num} km/h`;
+  //   else currentWindspeed = `${num} mph`;
+  //   return currentWindspeed;
+  // };
+
+  const createDistanceObject = (num, wind) => {
+    if (wind) {
+      console.log(num, 'the current number');
+
+      const meters = `${Number(num).toFixed(1)} m/s`;
+      const miles = `${Number(num * 2.23694).toFixed(1)} mph`;
+      return { meters, miles };
+    }
+
+    const kilometers = `${Number(num).toFixed(1)} km`;
+    const miles = `${Number(num * 0.621371).toFixed(1)} m`;
+
+    return { kilometers, miles };
   };
 
   const getBottomData = () => {
     const currentSunData = getCurrentSunsetData();
 
     const sunset = currentSunData.currentSunset;
-    let currentVisiblity;
     const sunrise = currentSunData.currentSunrise;
 
-    const windspeed = changeWindspeedData(
-      removeNegativeZeroes(currentForecastData.wind.speed)
+    console.log(currentForecastData.wind.speed, 'current fore cast speed');
+
+    const windspeed = createDistanceObject(
+      currentForecastData.wind.speed,
+      true
     );
 
     const chanceOfRain = currentOneTimeData.hourly[0].pop;
 
-    const feelsLike = removeNegativeZeroes(currentForecastData.main.feels_like);
+    const feelsLike = createTempObject(currentForecastData.main.feels_like);
 
     const { pressure } = currentForecastData.main;
     const { humidity } = currentForecastData.main;
@@ -240,8 +303,7 @@ const weatherData = () => {
 
     console.log(visibility.toFixed(1), 'visiblity fixed to one decimal place');
 
-    if (isCelsius) currentVisiblity = convertMetersToKilometers(visibility);
-    else currentVisiblity = convertMetersToMiles(visibility);
+    const currentVisiblity = createDistanceObject(visibility / 1000);
 
     const time = convertDtToObject(currentForecastData.dt, timezoneOffset);
 
@@ -268,9 +330,10 @@ const weatherData = () => {
         condition: data.weather[0].main,
         description: data.weather[0].description,
         chanceOfRain: data.pop,
-        max: removeNegativeZeroes(data.temp.max),
-        min: removeNegativeZeroes(data.temp.min),
+        max: createTempObject(data.temp.max),
+        min: createTempObject(data.temp.min),
       };
+
       weeklyObjects.push(weeklyObject);
     });
 
@@ -375,7 +438,7 @@ const weatherData = () => {
       const hourlyObject = {
         time: hourlyDates,
         condition: hourlyData.weather[0].main,
-        temp: removeNegativeZeroes(Math.round(hourlyData.temp)),
+        temp: createTempObject(hourlyData.temp),
         description: hourlyData.weather[0].description,
         chanceOfRain: hourlyData.pop,
       };
@@ -411,14 +474,23 @@ const weatherData = () => {
 
   const changeTemp = () => {
     isCelsius = !isCelsius;
-    isCelsius ? (units = '&units=metric') : (units = '&units=imperial');
-    return { isCelsius, units };
+    defaultCelsius = false;
+
+    return { isCelsius, defaultCelsius };
   };
+
+  const changeLocationByIndex = (num) => {
+    currentIndex = num;
+  };
+
+  const getCurrentCities = () => currentCities;
 
   const activateData = async () => {
     try {
       const index = currentIndex;
       let currentData;
+
+      if (!currentCities[index]) return false;
 
       currentData = await getData(index);
 
@@ -450,8 +522,8 @@ const weatherData = () => {
       if (currentTries < 3) {
         return activateData();
       }
-      throw new Error(err);
-      return { message: 'cannot get data' };
+
+      return { message: err, isError: true };
     }
   };
 
@@ -479,23 +551,21 @@ const weatherData = () => {
   //   long: '-102.0779482',
   // });
 
-  appendResult({
-    city: 'Seattle',
-    state: 'Washington',
-    country: 'US',
-    lat: '47.6038321',
-    long: '-122.3300624',
-    // lat: '40.7127281',
-    // long: '-74.0060152',
-  });
+  // appendResult({
+  //   city: 'Seattle',
+  //   state: 'Washington',
+  //   country: 'US',
+  //   lat: '47.6038321',
+  //   long: '-122.3300624',
+  // });
 
-  appendResult({
-    city: 'Provo',
-    state: 'Utah',
-    country: 'US',
-    lat: '40.2338438',
-    long: '-111.6585337',
-  });
+  // appendResult({
+  //   city: 'Provo',
+  //   state: 'Utah',
+  //   country: 'US',
+  //   lat: '40.2338438',
+  //   long: '-111.6585337',
+  // });
 
   // appendResult({
   //   city: 'London',
@@ -521,20 +591,22 @@ const weatherData = () => {
   //   long: '-88.0430541',
   // });
 
+  appendResult({
+    city: 'Ushuaia',
+    state: 'Tierra del Fuego Province',
+    country: 'AR',
+    lat: '-54.806115899999995',
+    long: '-68.3184972880496',
+  });
+
+  // -------------------- does not work
+
   // appendResult({
   //   city: 'Mobile',
   //   state: 'Alabama',
   //   country: 'US',
   //   lat: '312312330.6943566',
   //   long: '312312388.0430541',
-  // });
-
-  // appendResult({
-  //   city: 'Ushuaia',
-  //   state: 'Tierra del Fuego Province',
-  //   country: 'AR',
-  //   lat: '-54.806115899999995',
-  //   long: '-68.3184972880496',
   // });
 
   return {
@@ -544,6 +616,9 @@ const weatherData = () => {
     getCurrentTime,
     getResults,
     changeTemp,
+    getCurrentCities,
+    getCityByIndex,
+    changeLocationByIndex,
   };
 };
 

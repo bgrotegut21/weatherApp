@@ -47,6 +47,12 @@ const converTimeToAMPM = (hour, currentMinutes) => {
   return newHour;
 };
 
+// fix this equation
+const convertCelsiusToFarenheight = (num) => {
+  const fahrenheit = 1.8 * num + 32;
+  return Math.round(fahrenheit);
+};
+
 const convertMetersToKilometers = (num) => {
   let kilometer = num / 1000;
 
@@ -58,6 +64,13 @@ const convertMetersToKilometers = (num) => {
 
 const convertMetersToMiles = (num) => {
   let mile = num / 1609.34;
+
+  if (num % 1 !== 0) mile = mile.toFixed(1);
+  return `${mile.toFixed(1)} miles`;
+};
+
+const convertKilometersToMiles = (num) => {
+  let mile = num / 1.60934;
 
   if (num % 1 !== 0) mile = mile.toFixed(1);
   return `${mile.toFixed(1)} miles`;
@@ -151,5 +164,7 @@ export {
   convertDtToObject,
   convertMetersToKilometers,
   convertMetersToMiles,
+  convertKilometersToMiles,
+  convertCelsiusToFarenheight,
   fetchData,
 };

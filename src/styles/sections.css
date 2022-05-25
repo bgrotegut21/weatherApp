@@ -9,7 +9,11 @@
   height: 50px;
 }
 
-.currentCities {
+/* .currentCities {
+  display: none;
+} */
+
+.results {
   display: none;
 }
 
@@ -67,6 +71,7 @@
   width: 90px;
 }
 
+.results,
 .exitResults,
 .placeText,
 .resultText {

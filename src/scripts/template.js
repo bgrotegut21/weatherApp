@@ -29,7 +29,7 @@ const template = () => {
           </div>
         </div>
       </div>
-      <h1 class="placeTitle">Results</h1>
+      <h1 class="placeTitle">Cities</h1>
 
       <div class="currentCities"></div>
 
@@ -39,6 +39,15 @@ const template = () => {
     </div>
 
     <section class="mainSection">
+
+      <section class = "noCitySection">
+      <div class = 'cityDoesNotExit'>
+        <h1 class = 'citySectionTitle'>:(</h1>
+        <h2 class = 'citySectionDescription'>You currently do not have any cities saved, please add a city to see the weather.</h2>
+      </div>
+    </section>
+
+
       <div class="overlay">
         <div class="currentError">
           <h2 class="errorMessage">
@@ -134,13 +143,13 @@ const template = () => {
     return mainTemplate;
   };
 
-  const createCityTemplate = (isResult) => {
+  const createCityTemplate = (item, isAdded) => {
     let cityTemplate;
 
-    if (isResult) {
+    if (isAdded) {
       cityTemplate = `
       <div class="city">
-        <h3 class="placeText">London, GB</h3>
+        <h3 class="placeText">${item.city}, ${item.country}</h3>
         <button class="deleteCity">X</button>
        </div>
 
@@ -148,7 +157,7 @@ const template = () => {
     } else {
       cityTemplate = `
               <div class="city">
-              <h3 class="resultText">Paris, FR</h3>
+              <h3 class="resultText">${item.city}, ${item.country}</h3>
               <button class="addCity">+</button>
               </div>
                </div>
@@ -225,7 +234,7 @@ const template = () => {
     return warningText;
   };
 
-  const createHouryTemplate = (data) => {
+  const createHourlyForecast = (data, unit) => {
     let infoText = '&nbsp';
     let typeOfText = 'infoText';
     let weatherIcon;
@@ -245,7 +254,7 @@ const template = () => {
         infoText = `${currentRainPecentage}%`;
       }
       currentTime = data.time.currentDateObject.amPmHour;
-      currentTemp = `${data.temp}°`;
+      currentTemp = `${data.temp[unit]}°`;
     }
 
     const hourlyText = `
@@ -264,15 +273,19 @@ const template = () => {
     return hourlyText;
   };
 
-  const createForecastLine = (data) => {
-    console.log(data.chance, 'data the chances');
+  const createForecastLine = (data, unit) => {
+    console.log(unit, 'the currrne unit');
+    console.log(data, 'the current data');
     const currentChance = Math.floor(data.chanceOfRain * 100);
     let chanceText = '';
     const forecastIcon = getIcon(data);
     const { day } = data;
-    const { max } = data;
-    const { min } = data;
 
+    console.log(unit, 'the current unit');
+    const max = data.max[unit];
+    const min = data.min[unit];
+
+    console.log(data.max, 'data max');
     console.log(currentChance, 'the current chance');
     if (currentChance > 0) chanceText = `${currentChance}%`;
 
@@ -295,7 +308,7 @@ const template = () => {
     createMainTemplate,
     createCityTemplate,
     createWarning,
-    createHouryTemplate,
+    createHourlyForecast,
     createForecastLine,
   };
 };

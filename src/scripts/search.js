@@ -16,29 +16,39 @@ const search = () => {
 
   const findResults = async (text) => {
     const items = [];
+    let results = [];
 
     const url = `
     http://api.openweathermap.org/geo/1.0/direct?q=${text}&limit=5${appid}`;
 
-    const results = await fetchData(url);
+    try {
+      if (text.length > 0) results = await fetchData(url);
 
-    console.log(results, 'the results');
-    results.forEach((result) => {
-      const item = createTemplate(
-        result.name,
-        result.country,
-        String(result.lat),
-        String(result.lon),
-        result.state
-      );
+      console.log(results, 'THE current retults');
 
-      items.push(item);
-    });
+      if (!Array.isArray(results)) results = [];
 
-    console.log(items, 'the current items');
+      console.log(results, 'the results');
+
+      results.forEach((result) => {
+        const item = createTemplate(
+          result.name,
+          result.country,
+          String(result.lat),
+          String(result.lon),
+          result.state
+        );
+
+        items.push(item);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+    return items;
   };
 
-  findResults('london');
+  return { findResults };
 };
 
-search();
+export default search;

@@ -190,7 +190,33 @@ html {
   background-repeat: no-repeat;
 }
 
+.mainSection {
+  display: block;
+}
+
+.noCitySection {
+  position: absolute;
+  bottom: 50%;
+  left: 20%;
+  right: 20%;
+  display: none;
+}
+
+.noCitySection h1 {
+  font-size: 100px;
+  font-family: 'Assistant', sans-serif;
+}
+
+.noCitySection h2 {
+  font-family: 'Assistant', sans-serif;
+}
+
+.exitResults {
+  display: none;
+}
+
 body {
+  /* background-color: rgb(0, 120, 215); */
   height: 100%;
 }
 
