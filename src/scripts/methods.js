@@ -47,7 +47,6 @@ const converTimeToAMPM = (hour, currentMinutes) => {
   return newHour;
 };
 
-// fix this equation
 const convertCelsiusToFarenheight = (num) => {
   const fahrenheit = 1.8 * num + 32;
   return Math.round(fahrenheit);

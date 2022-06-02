@@ -13,7 +13,6 @@ const ui = () => {
   let dom = getDom();
   const currentTemplate = template();
   const findData = data;
-  const image = getImages();
   const arrangement = template();
   let currentUnit = 'celsius';
   let distanceUnit = 'kilometers';
