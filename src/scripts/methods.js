@@ -56,8 +56,6 @@ const convertCelsiusToFarenheight = (num) => {
 const convertMetersToKilometers = (num) => {
   let kilometer = num / 1000;
 
-  console.log(kilometer, 'current kilometer');
-
   if (num % 1 !== 0) kilometer = kilometer.toFixed(1);
   return `${kilometer.toFixed(1)} km`;
 };
@@ -75,10 +73,6 @@ const convertKilometersToMiles = (num) => {
   if (num % 1 !== 0) mile = mile.toFixed(1);
   return `${mile.toFixed(1)} miles`;
 };
-
-// const convertMetersToMiles = (num, isCelsius) => {
-
-// }
 
 const convertDtToObject = (date, timezoneOffset) => {
   const daysOfTheWeek = [

@@ -14,6 +14,7 @@ module.exports = {
     './src/scripts/dom.js',
     './src/scripts/ui.js',
     './src/scripts/menu.js',
+    './src/scripts/store.js',
   ],
   devtool: 'inline-source-map',
   devServer: {

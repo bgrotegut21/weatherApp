@@ -12,3 +12,7 @@ const store = () => {
 
   return { getData, saveData };
 };
+
+const Storage = store();
+
+export default Storage;

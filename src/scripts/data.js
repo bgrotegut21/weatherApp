@@ -1,15 +1,11 @@
 import {
   convertDtToObject,
-  convertMetersToKilometers,
-  convertMetersToMiles,
-  convertKilometersToMiles,
   convertCelsiusToFarenheight,
   fetchData,
 } from './methods';
 
 import settings from './settings';
-
-import emit from './emit';
+import Storage from './store';
 
 const weatherData = () => {
   let isCelsius = true;
@@ -34,31 +30,6 @@ const weatherData = () => {
   let timezoneOffset;
   let currentTime;
 
-  // const appendResult = (result) => {
-  //   let isSame = true;
-
-  //   console.log(result)
-
-  //   if (currentCities.length > 0) {
-  //     currentCities.forEach((currentResult) => {
-  //       const currentResultKeys = Object.keys(currentResult);
-  //       currentResultKeys.forEach((key) => {
-  //         if (currentResult[key] !== result[key]) {
-  //           isSame = false;
-  //         }
-  //       });
-  //     });
-  //   } else {
-  //     isSame = false;
-  //   }
-
-  //   if (!isSame) {
-  //     currentCities.push(result);
-  //     return result;
-  //   }
-  //   return false;
-  // };
-
   const compareObjects = (object1, object2) => {
     const objectKeys = Object.keys(object1);
     let isEqual = true;
@@ -72,16 +43,12 @@ const weatherData = () => {
   };
 
   const appendResult = (result) => {
-    console.log(result, 'the current result');
-
     const checkResult = currentCities.filter((city) =>
       compareObjects(city, result)
     );
-
-    console.log(checkResult, 'the check result');
-
     if (checkResult.length === 0) {
       currentCities.push(result);
+      Storage.saveData(currentCities);
     } else {
       return false;
     }
@@ -103,6 +70,7 @@ const weatherData = () => {
       });
 
       currentCities = latestCities;
+      Storage.saveData(currentCities);
 
       return latestCities;
     }
@@ -116,56 +84,22 @@ const weatherData = () => {
     let forecastData;
     let oneTimeData;
 
-    // if (index) {
-    //   if (currentCities[index]) {
-    //     currentIndex = index;
-
-    //     const city = currentCities[currentIndex];
-    //     const cityCoordinatesUrl = getCoordinatesUrl(city);
-
-    //     const cityForeCastUrl =
-    //       forecastUrl + cityCoordinatesUrl + units + appid;
-    //     const cityOneTimeUrl = oneTimeUrl + cityCoordinatesUrl + units + appid;
-    //   }
-    // }
-
-    // if (currentCities.length === 0) {
-    //   appendResult({
-    //     city: 'Seattle',
-    //     state: 'Washington',
-    //     country: 'US',
-    //     lat: '47.6038321',
-    //     long: '-122.3300624',
-    //     // lat: '40.7127281',
-    //     // long: '-74.0060152',
-    //   });
-    //   // console.log(currentCities, 'the current cities');
-    //   return getData();
-    // }
-
     const currentCity = currentCities[currentIndex];
     const coordinateUrl = getCoordinatesUrl(currentCity);
 
     const currentForecastUrl = forecastUrl + coordinateUrl + units + appid;
     const currentOneTimeUrl = oneTimeUrl + coordinateUrl + units + appid;
     try {
-      // console.log('trying');
-
-      // console.log(currentForecastUrl, 'the current forecastUrl');
-
       forecastData = await fetchData(currentForecastUrl);
       oneTimeData = await fetchData(currentOneTimeUrl);
 
       return { forecastData, oneTimeData };
     } catch (err) {
-      console.error(err);
       return err;
     }
   };
 
   const removeNegativeZeroes = (num) => {
-    // const temp = Math.round(num);
-
     const temp = Math.round(num);
 
     if (Object.is(temp, -0)) return 0;
@@ -174,7 +108,6 @@ const weatherData = () => {
 
   const createTempObject = (num) => {
     const celsius = removeNegativeZeroes(num);
-    // const celsius = num;
     const fahrenheit = convertCelsiusToFarenheight(num);
     return { celsius, fahrenheit };
   };
@@ -245,9 +178,6 @@ const weatherData = () => {
     } else {
       currentSunset = possibleSunsets[0];
     }
-
-    // console.log(possibleSunrises[0], 'the current time');
-
     if (currentHour > possibleSunrises[0].time.currentDateObject.hours) {
       currentSunrise = possibleSunrises[1];
     } else {
@@ -257,18 +187,8 @@ const weatherData = () => {
     return { currentSunrise, currentSunset };
   };
 
-  // const changeWindspeedData = (num) => {
-  //   let currentWindspeed = '';
-
-  //   if (isCelsius) currentWindspeed = `${num} km/h`;
-  //   else currentWindspeed = `${num} mph`;
-  //   return currentWindspeed;
-  // };
-
   const createDistanceObject = (num, wind) => {
     if (wind) {
-      console.log(num, 'the current number');
-
       const meters = `${Number(num).toFixed(1)} m/s`;
       const miles = `${Number(num * 2.23694).toFixed(1)} mph`;
       return { meters, miles };
@@ -286,8 +206,6 @@ const weatherData = () => {
     const sunset = currentSunData.currentSunset;
     const sunrise = currentSunData.currentSunrise;
 
-    console.log(currentForecastData.wind.speed, 'current fore cast speed');
-
     const windspeed = createDistanceObject(
       currentForecastData.wind.speed,
       true
@@ -300,8 +218,6 @@ const weatherData = () => {
     const { pressure } = currentForecastData.main;
     const { humidity } = currentForecastData.main;
     const { visibility } = currentForecastData;
-
-    console.log(visibility.toFixed(1), 'visiblity fixed to one decimal place');
 
     const currentVisiblity = createDistanceObject(visibility / 1000);
 
@@ -338,8 +254,6 @@ const weatherData = () => {
     });
 
     return weeklyObjects;
-
-    // console.log(weeklyObjects);
   };
 
   const getSunArrays = (array, sunData) => {
@@ -347,18 +261,8 @@ const weatherData = () => {
     let index = 0;
     const newArray = array;
 
-    // console.log(array, 'the current array');
-    // console.log(sunData, 'the sun data');
-
-    // console.log(array, 'the hourly obejects');
-
-    console.log(sunData, 'the current sun data');
-
     array.forEach((hourlyObject) => {
       sunData.forEach((sunsetData) => {
-        // console.log(sunsetData, 'the current sunset data');
-        // console.log(hourlyObject, 'the current hourlyObject');
-
         if (
           sunsetData.time.currentDateObject.year ===
             hourlyObject.time.currentDateObject.year &&
@@ -383,7 +287,6 @@ const weatherData = () => {
       newArray.splice(currentData.currentIndex, 0, currentData.sunset);
     });
 
-    console.log(newArray, 'the current new array');
     return newArray;
   };
 
@@ -393,7 +296,6 @@ const weatherData = () => {
     newArray = getSunArrays(newArray, sunsetData.sunsetArray);
     newArray = getSunArrays(newArray, sunsetData.sunriseArray);
 
-    console.log(newArray, 'the current new array');
     return newArray;
   };
 
@@ -443,8 +345,6 @@ const weatherData = () => {
         chanceOfRain: hourlyData.pop,
       };
       hourlyObjects.push(hourlyObject);
-      // //console.log(hourlyDates, 'the hourly dates');
-      // //console.log(hourlyObject, 'the hourly object');
     });
 
     hourlyObjects = giveSunData(hourlyObjects);
@@ -485,24 +385,28 @@ const weatherData = () => {
 
   const getCurrentCities = () => currentCities;
 
+  const getSavedCities = () => {
+    const savedCities = Storage.getData();
+
+    if (savedCities !== null) {
+      currentCities = savedCities;
+      return currentCities;
+    }
+    return false;
+  };
+
   const activateData = async () => {
     try {
+      getSavedCities();
       const index = currentIndex;
-      let currentData;
-
       if (!currentCities[index]) return false;
 
-      currentData = await getData(index);
+      const currentData = await getData(index);
 
       currentForecastData = currentData.forecastData;
       currentOneTimeData = currentData.oneTimeData;
       timezoneOffset = currentOneTimeData.timezone_offset;
       currentTime = convertDtToObject(currentForecastData.dt, timezoneOffset);
-
-      // console.log(currentTime, 'the current time');
-
-      // console.log(currentOneTimeData, 'current one time data');
-      // console.log(currentForecastData, 'the current forecastdata');
 
       const topData = getTopData();
       const hourlyData = getHourlyData();
@@ -510,104 +414,15 @@ const weatherData = () => {
       const bottomData = getBottomData();
       const warningData = getWarningData();
 
-      // console.log(warningData, 'the warning data');
-
-      // console.log(hourlyData, 'the current hourlyData');
-
-      // console.log({ topData, hourlyData, weeklyData, bottomData });
-
       return { topData, hourlyData, weeklyData, bottomData, warningData };
     } catch (err) {
       currentTries += 1;
       if (currentTries < 3) {
         return activateData();
       }
-
       return { message: err, isError: true };
     }
   };
-
-  // appendResult({
-  //   city: 'New York',
-  //   state: 'New York',
-  //   country: 'US',
-  //   lat: '40.7127281',
-  //   long: '-74.0060152',
-  // });
-
-  // appendResult({
-  //   city: 'Rugby',
-  //   state: 'North Dakota',
-  //   country: 'US',
-  //   lat: '48.368888',
-  //   long: '-99.996246',
-  // });
-
-  // appendResult({
-  //   city: 'Midland',
-  //   state: 'Texas',
-  //   country: 'US',
-  //   lat: '31.9973662',
-  //   long: '-102.0779482',
-  // });
-
-  // appendResult({
-  //   city: 'Seattle',
-  //   state: 'Washington',
-  //   country: 'US',
-  //   lat: '47.6038321',
-  //   long: '-122.3300624',
-  // });
-
-  // appendResult({
-  //   city: 'Provo',
-  //   state: 'Utah',
-  //   country: 'US',
-  //   lat: '40.2338438',
-  //   long: '-111.6585337',
-  // });
-
-  // appendResult({
-  //   city: 'London',
-  //   state: 'England',
-  //   country: 'GB',
-  //   lat: '51.5073219',
-  //   long: '-0.1276474',
-  // });
-
-  // appendResult({
-  //   city: 'El Paso',
-  //   state: 'Texas',
-  //   country: 'US',
-  //   lat: '31.7754152',
-  //   long: '-106.464634',
-  // });
-
-  // appendResult({
-  //   city: 'Mobile',
-  //   state: 'Alabama',
-  //   country: 'US',
-  //   lat: '30.6943566',
-  //   long: '-88.0430541',
-  // });
-
-  appendResult({
-    city: 'Ushuaia',
-    state: 'Tierra del Fuego Province',
-    country: 'AR',
-    lat: '-54.806115899999995',
-    long: '-68.3184972880496',
-  });
-
-  // -------------------- does not work
-
-  // appendResult({
-  //   city: 'Mobile',
-  //   state: 'Alabama',
-  //   country: 'US',
-  //   lat: '312312330.6943566',
-  //   long: '312312388.0430541',
-  // });
 
   return {
     activateData,

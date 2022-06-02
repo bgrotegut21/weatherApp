@@ -36,8 +36,6 @@ const ui = () => {
     dom.body.removeAttribute('class');
     let currentClassName;
 
-    console.log(hourlyData, 'the current hourlydata');
-
     const conditions = [
       'Clouds',
       'Snow',
@@ -61,7 +59,6 @@ const ui = () => {
     ];
 
     conditions.forEach((condition) => {
-      console.log(currentCondition, 'the current conditoin object');
       if (condition === currentCondition) {
         if (condition === 'Drizzle') {
           currentClassName = 'rain';
@@ -88,29 +85,18 @@ const ui = () => {
 
   const organizeTopData = () => {
     const { topData } = organizedData;
-    console.log(organizedData);
 
     const hourlyData = organizedData.hourlyData[0];
 
-    console.log(hourlyData, 'the current hourly data');
-
-    console.log(topData, 'the current top data');
     dom.cityTitle.textContent = `${topData.cityName}, ${topData.country}`;
     dom.condition.textContent = topData.description;
     dom.temp.textContent = `${topData.temp[currentUnit]}°`;
     dom.highTemp.textContent = `High ${topData.max[currentUnit]}°`;
     dom.lowTemp.textContent = `Low ${topData.min[currentUnit]}°`;
     organizeBackgrounds(topData.condition, hourlyData);
-
-    console.log(dom, 'the current dom');
-    console.log(dom.cityTitle, 'dom city title');
   };
 
   const compareSun = (currentHour) => {
-    console.log(currentTime, 'the current time');
-
-    console.log(currentHour, 'the current hour');
-
     const currentUtcHour = currentHour.time.utcDateObject;
     const currentUtcTime = currentTime.utcDateObject;
 
@@ -127,21 +113,13 @@ const ui = () => {
     return false;
   };
 
-  // remember to test this code
   const organizeHourlyForecastHolder = () => {
     dom.hourlyForecast.innerHTML = '';
 
-    organizedData.hourlyData.forEach((hourly) => {
-      // console.log(hourly, 'THE HOURLY DATA');
-    });
-
     const hourlyData = copyArray(organizedData.hourlyData);
 
-    console.log(organizedData.hourlyData, 'organized hourly data');
     let currentHourlyData = hourlyData.splice(1);
     const currentHour = currentHourlyData[0];
-    console.log(currentHour, 'the current hour');
-    console.log(currentHourlyData, 'the current hourly data');
     if (compareSun(currentHour))
       currentHourlyData = currentHourlyData.splice(1);
 
@@ -157,8 +135,6 @@ const ui = () => {
   const organizeWarningData = () => {
     dom.warningHolder.innerHTML = '';
     const { warningData } = organizedData;
-
-    console.log(dom.warningHolder, 'dom warning holder');
 
     if (Array.isArray(warningData) && warningData.length !== 0) {
       warningData.forEach((warnData) => {
@@ -203,10 +179,7 @@ const ui = () => {
       canChangeData = true;
 
       dom.noCitySection.style.display = 'none';
-
-      console.log(dom.wordHolder, 'the dom warning holder');
-
-      dom.body.style.backgroundColor = 'none';
+      dom.body.style.backgroundColor = 'transparent';
 
       dom.wordHolder.style.display = 'flex';
       dom.warningHolder.style.display = 'flex';
@@ -262,7 +235,6 @@ const ui = () => {
       triggerCitiesDoesNotExist(false);
 
       currentTime = findData.getCurrentTime();
-      console.log(organizedData, 'the organized data');
       organizeTopData();
       organizeHourlyForecastHolder();
       organizeWarningData();
@@ -272,7 +244,6 @@ const ui = () => {
   };
 
   const refreshData = async () => {
-    // console.log(organizedData, 'the organized data');
     organizeTopData();
     organizeHourlyForecastHolder();
     organizeWarningData();
@@ -290,13 +261,11 @@ const ui = () => {
       distanceUnit = 'kilometers';
       windUnit = 'meters';
     }
-    console.log(organizedData, 'the organzied data');
     if (canChangeData) refreshData();
   };
 
   const activatePage = () => {
     const mainTemplate = currentTemplate.createMainTemplate();
-    console.log(mainTemplate, 'the main template');
     dom.body.innerHTML = mainTemplate;
     dom = getDom();
   };

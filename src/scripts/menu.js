@@ -9,8 +9,6 @@ const menu = () => {
   let dom;
   const findData = data;
   const arrangement = template();
-  const menuOn = false;
-  let currentCities = [];
 
   let isTemp = false;
 
@@ -32,7 +30,6 @@ const menu = () => {
   const activateMenu = () => {
     userInterface.activatePage();
     userInterface.activatePageData();
-    currentCities = findData.getCurrentCities();
     dom = getDom();
 
     changeMenuMode();
@@ -145,7 +142,6 @@ const menu = () => {
   };
 
   const organizeItems = (items) => {
-    console.log(items, 'the current items');
     dom.results.innerHTML = '';
 
     if (items.length > 0) {
@@ -161,21 +157,15 @@ const menu = () => {
   };
 
   const pickResult = (event) => {
-    console.log('picking');
-
     const addTown = event.target;
     const itemIndex = addTown.assignedIndex;
     const pickedItem = resultItems[itemIndex];
-
-    console.log(pickedItem, 'the current picked item');
 
     findData.appendResult(pickedItem);
     changeMenuMode();
   };
 
   const changePlace = (index) => {
-    console.log(index, 'the current index');
-
     findData.changeLocationByIndex(index);
     userInterface.activatePageData();
   };
@@ -239,16 +229,11 @@ const menu = () => {
   };
 
   const searchResults = async () => {
-    console.log('searching results');
     const text = dom.searchBar.value;
     const items = await explore.findResults(text);
     resultItems = items;
 
-    console.log(items, 'the curent result items');
     changeMenuMode(resultItems);
-    const updatedDom = getDom();
-
-    console.log(updatedDom.addCity, 'the adding city');
   };
 
   const activateHamurgerMenuAnimation = () => {

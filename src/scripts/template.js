@@ -1,7 +1,6 @@
-import { getImages, getIcons } from './dom';
+import { getIcons } from './dom';
 
 const template = () => {
-  const iamge = getImages();
   const icon = getIcons();
 
   const createMainTemplate = () => {
