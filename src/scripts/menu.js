@@ -239,7 +239,6 @@ const menu = () => {
   const activateHamurgerMenuAnimation = () => {
     const { overlay } = dom;
     const { menuSection } = dom;
-    const { exitMenu } = dom;
 
     overlay.style.display = 'block';
 

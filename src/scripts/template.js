@@ -273,19 +273,14 @@ const template = () => {
   };
 
   const createForecastLine = (data, unit) => {
-    console.log(unit, 'the currrne unit');
-    console.log(data, 'the current data');
     const currentChance = Math.floor(data.chanceOfRain * 100);
     let chanceText = '';
     const forecastIcon = getIcon(data);
     const { day } = data;
 
-    console.log(unit, 'the current unit');
     const max = data.max[unit];
     const min = data.min[unit];
 
-    console.log(data.max, 'data max');
-    console.log(currentChance, 'the current chance');
     if (currentChance > 0) chanceText = `${currentChance}%`;
 
     const foreCastText = `<div class="forecastLine">
