@@ -245,7 +245,7 @@ const menu = () => {
     setTimeout(() => {
       menuSection.classList.add('menuSectionAnimation');
       overlay.classList.add('overlayAnimation');
-    });
+    }, 0);
     setTimeout(() => {
       addInternalBindings();
       changeMenuMode();
